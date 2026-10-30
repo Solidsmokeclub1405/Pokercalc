@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ماشین‌حساب ریاضی پوکر هولدم</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3efe4;--fg:#1d2a24;--card:#fffdf6;--bd:#d8d1bd;--ac:#1f5a43;--acf:#fff;--br:#a9801f;--mut:#667068;--red:#b3261e;--ok:#1f7a4d;--bar:#e6e0cc;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1c17;--fg:#e9e6d8;--card:#16271f;--bd:#2c4338;--ac:#4fae86;--acf:#0b1511;--br:#d4ad55;--mut:#93a39a;--red:#ff7b72;--ok:#6fd49f;--bar:#22382e}}
+:root[data-theme="dark"]{--bg:#0f1c17;--fg:#e9e6d8;--card:#16271f;--bd:#2c4338;--ac:#4fae86;--acf:#0b1511;--br:#d4ad55;--mut:#93a39a;--red:#ff7b72;--ok:#6fd49f;--bar:#22382e}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,sans-serif;line-height:1.8;font-size:15px}
+.w{max-width:760px;margin:0 auto;padding:18px 14px 40px}
+h1{font-size:1.5rem;font-weight:800;margin:6px 0 2px}
+.sub{color:var(--mut);margin:0 0 14px;font-size:.9rem}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:10px}
+.tabs button{flex:none;font:inherit;font-weight:600;padding:6px 14px;border:1px solid var(--bd);background:var(--card);color:var(--fg);border-radius:20px;cursor:pointer}
+.tabs button[aria-selected=true]{background:var(--ac);color:var(--acf);border-color:var(--ac)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--br);outline-offset:2px}
+.p{display:none;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px}
+.p.on{display:block}
+.p h2{font-size:1.1rem;margin:0 0 4px}
+.note{color:var(--mut);font-size:.85rem;margin:0 0 12px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:10px 0}
+label{display:flex;flex-direction:column;font-size:.85rem;color:var(--mut);gap:2px}
+input,select{font:inherit;padding:7px 9px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--fg);width:100%;direction:ltr;text-align:right}
+.res{margin-top:12px;border-top:1px dashed var(--bd);padding-top:10px}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
+.kv b{font-weight:800;color:var(--ac)}
+.big{font-size:1.6rem;font-weight:800;color:var(--ac)}
+.good{color:var(--ok);font-weight:600}.bad{color:var(--red);font-weight:600}
+.btn{font:inherit;font-weight:700;padding:9px 18px;border:0;border-radius:8px;background:var(--ac);color:var(--acf);cursor:pointer}
+.btn.s{background:transparent;color:var(--fg);border:1px solid var(--bd);padding:6px 12px;font-weight:600}
+.bar{height:12px;border-radius:6px;background:var(--bar);overflow:hidden;display:flex;margin:6px 0}
+.bar i{display:block;height:100%}
+.slots{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.slots .lb{font-size:.85rem;color:var(--mut);min-width:48px}
+.cc{display:inline-flex;align-items:center;justify-content:center;width:38px;height:50px;border:1px solid var(--bd);border-radius:6px;background:#fffef8;color:#1b1b1b;font-weight:800;direction:ltr;font-size:.95rem}
+.cc.r{color:#c0281f}.cc.e{background:transparent;border-style:dashed;color:var(--mut)}
+.mode button{font:inherit;padding:4px 12px;border:1px solid var(--bd);background:transparent;color:var(--fg);border-radius:6px;cursor:pointer}
+.mode button.on{background:var(--br);color:#fff;border-color:var(--br)}
+.grid{direction:ltr;display:grid;grid-template-columns:repeat(13,1fr);gap:3px;margin:10px 0}
+.grid button{font:inherit;font-size:.78rem;font-weight:700;padding:4px 0;border:1px solid var(--bd);background:#fffef8;color:#1b1b1b;border-radius:4px;cursor:pointer;min-width:0}
+.grid button.r{color:#c0281f}
+.grid button.u{background:var(--ac);color:var(--acf);border-color:var(--ac)}
+table{width:100%;border-collapse:collapse;font-size:.88rem;margin:6px 0}
+th,td{padding:5px 6px;border-bottom:1px solid var(--bd);text-align:right}
+th{color:var(--mut);font-weight:600}
+td.n{direction:ltr;text-align:left}
+.fm{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:8px 12px;margin:10px 0;font-size:.88rem}
+.fm code{direction:ltr;unicode-bidi:embed;font-family:ui-monospace,Menlo,monospace;color:var(--br)}
+.sl{display:flex;align-items:center;gap:6px;direction:ltr}.sl input[type=range]{flex:1;padding:0;border:0;background:transparent;accent-color:var(--ac);height:28px;direction:ltr}.sl .pm{flex:none;width:32px;height:32px;border-radius:8px;border:1px solid var(--bd);background:var(--bg);color:var(--fg);font:inherit;font-weight:800;font-size:1.1rem;cursor:pointer;line-height:1}.sl b{flex:none;min-width:52px;text-align:center;color:var(--ac);font-weight:800}
+.ft{margin-top:22px;padding-top:14px;border-top:1px solid var(--bd);text-align:center;color:var(--mut);font-size:.9rem}.ft a{color:var(--br);font-weight:700;text-decoration:none}
+.gl{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:12px}.un{display:flex;border:1px solid var(--bd);border-radius:20px;overflow:hidden}.un button{font:inherit;font-weight:600;padding:6px 14px;border:0;background:var(--card);color:var(--fg);cursor:pointer}.un button.on{background:var(--br);color:var(--acf)}.gb{flex:1;min-width:200px}.sl b{min-width:72px}.sl .x2{width:auto;padding:0 8px;font-size:.85rem}dl.gd dt{font-weight:800;color:var(--ac);margin-top:12px}dl.gd dd{margin:2px 0 0;font-size:.9rem}dl.gd dd i{color:var(--br);font-style:normal;font-weight:600}
+.mx{display:grid;grid-template-columns:repeat(13,1fr);gap:2px;direction:ltr;margin:10px 0}.mx i{font-style:normal;font-size:.6rem;text-align:center;padding:5px 0;border-radius:3px;font-weight:600;min-width:0}.mR{background:#2e8b57;color:#fff}.mB{background:#a9801f;color:#fff}.mC{background:#3b6fb0;color:#fff}.mF,.mK{background:var(--bar);color:var(--mut)}.mx i.me{outline:3px solid var(--fg);outline-offset:-1px;position:relative}
+</style>
+</head>
+<body>
+<div class="w">
+<h1>ماشین‌حساب ریاضی پوکر هولدم</h1>
+<p class="sub">ایکویتی، شانس پات، اوت، بلوف، کمبو و SPR؛ همه‌ی ریاضیات کاربردی میز در یک صفحه.</p>
+<div class="gl"><div class="un"><button type="button" class="on" data-u="c">محاسبه با مبلغ (چیپ)</button><button type="button" data-u="b">محاسبه با بیگ‌بلایند (BB)</button></div><label class="gb">اندازه‌ی یک بیگ‌بلایند (چیپ)<input id="gbb" type="number" value="50"></label></div>
+<div class="tabs" role="tablist" id="tabs"></div>
+
+<section class="p" id="p0">
+<h2>ایکویتی (شبیه‌ساز مونت‌کارلو)</h2>
+<p class="note">کارت‌های خودت و برد را انتخاب کن. حریف‌ها دست تصادفی دارند. روی کارت انتخاب‌شده بزنی حذف می‌شود.</p>
+<div class="mode"><button id="mh" class="on">انتخاب دست من</button> <button id="mb">انتخاب برد</button> <button class="btn s" id="clr">پاک کردن</button></div>
+<div class="slots"><span class="lb">دست من</span><span id="sh"></span></div>
+<div class="slots"><span class="lb">برد</span><span id="sb"></span></div>
+<div class="grid" id="grid"></div>
+<div class="row"><label>تعداد حریف<select id="opp"></select></label></div>
+<button class="btn" id="go">محاسبه</button>
+<div class="res" id="r0"></div>
+</section>
+
+<section class="p" id="p1">
+<h2>شانس پات و ارزش مورد انتظار</h2>
+<p class="note">حریف شرط بسته و تو باید تصمیم بگیری کال کنی یا نه.</p>
+<div class="row">
+<label>پات قبل از شرط حریف<input id="pt" type="number" value="100"></label>
+<label>شرط حریف (مبلغ کال)<input id="bt" type="number" value="50"></label>
+<label>ایکویتی من (٪)، اختیاری<input id="eq" type="number" value="30"></label>
+<label>برد احتمالی در خیابان‌های بعد (ایمپلاید)<input id="im" type="number" value="0"></label>
+</div>
+<div class="fm">ایکویتی لازم = <code>کال ÷ (پات + شرط + کال)</code></div>
+<div class="res" id="r1"></div>
+</section>
+
+<section class="p" id="p2">
+<h2>اوت و شانس رسیدن</h2>
+<p class="note">اوت یعنی کارتی که دستت را به بهترین دست می‌رساند.</p>
+<div class="row">
+<label>تعداد اوت<input id="ou" type="number" value="9" min="0" max="25"></label>
+<label>مرحله<select id="st"><option value="f">فلاپ (۲ کارت مانده)</option><option value="t">ترن (۱ کارت مانده)</option></select></label>
+</div>
+<div class="res" id="r2"></div>
+<table id="tb2"></table>
+</section>
+
+<section class="p" id="p3">
+<h2>بلوف، MDF و نسبت بلوف به ولیو</h2>
+<p class="note">حداقل دفاعی که حریف باید بکند تا بلوف تو خودبه‌خود سودآور نشود.</p>
+<div class="row">
+<label>پات<input id="bp" type="number" value="100"></label>
+<label>سایز شرط من<input id="bb" type="number" value="66"></label>
+<label>احتمال فولد حریف (٪)<input id="bf" type="number" value="50"></label>
+<label>ایکویتی من وقتی کال شود (٪)<input id="be" type="number" value="15"></label>
+</div>
+<div class="fm">فولد لازم = <code>B ÷ (P + B)</code> &nbsp;|&nbsp; MDF = <code>P ÷ (P + B)</code></div>
+<div class="res" id="r3"></div>
+</section>
+
+<section class="p" id="p4">
+<h2>کمبو و احتمال دست‌ها</h2>
+<p class="note">تعداد دست‌های ممکن حریف را با حذف کارت‌های دیده‌شده (بلاکر) بشمار.</p>
+<div class="row">
+<label>کارت باقی‌مانده از رتبه‌ی اول (۰ تا ۴)<input id="cx" type="number" value="4" min="0" max="4"></label>
+<label>کارت باقی‌مانده از رتبه‌ی دوم (۰ تا ۴)<input id="cy" type="number" value="4" min="0" max="4"></label>
+</div>
+<div class="res" id="r4"></div>
+<table>
+<tr><th>نوع دست شروع</th><th>کمبو</th><th>احتمال</th></tr>
+<tr><td>یک جفت مشخص (مثلاً AA)</td><td class="n">6</td><td class="n" id="c1"></td></tr>
+<tr><td>هر جفت</td><td class="n">78</td><td class="n" id="c2"></td></tr>
+<tr><td>دو کارت مشخص هم‌خال (مثلاً AKs)</td><td class="n">4</td><td class="n" id="c3"></td></tr>
+<tr><td>دو کارت مشخص غیرهم‌خال (AKo)</td><td class="n">12</td><td class="n" id="c4"></td></tr>
+<tr><td>AK به هر شکل</td><td class="n">16</td><td class="n" id="c5"></td></tr>
+<tr><td>دو کارت برودوی (T تا A، بدون جفت)</td><td class="n">160</td><td class="n" id="c6"></td></tr>
+<tr><td>هر دست هم‌خال</td><td class="n">312</td><td class="n" id="c7"></td></tr>
+</table>
+<table>
+<tr><th>دست نهایی با ۷ کارت</th><th>احتمال</th></tr>
+<tr><td>رویال/استریت فلاش</td><td class="n">۰٫۰۳۱٪</td></tr>
+<tr><td>فورکارت</td><td class="n">۰٫۱۶۸٪</td></tr>
+<tr><td>فول‌هاوس</td><td class="n">۲٫۶۰٪</td></tr>
+<tr><td>فلاش</td><td class="n">۳٫۰۳٪</td></tr>
+<tr><td>استریت</td><td class="n">۴٫۶۲٪</td></tr>
+<tr><td>ست</td><td class="n">۴٫۸۳٪</td></tr>
+<tr><td>دو جفت</td><td class="n">۲۳٫۵٪</td></tr>
+<tr><td>یک جفت</td><td class="n">۴۳٫۸٪</td></tr>
+<tr><td>های‌کارت</td><td class="n">۱۷٫۴٪</td></tr>
+</table>
+<table>
+<tr><th>رویدادهای مهم</th><th>احتمال</th></tr>
+<tr><td>جفت در دست و ست شدن در فلاپ</td><td class="n">۱۱٫۸٪</td></tr>
+<tr><td>دو کارت غیرجفت و خوردن حداقل یک جفت در فلاپ</td><td class="n">۳۲٫۴٪</td></tr>
+<tr><td>هم‌خال در دست و فلاش‌دراو در فلاپ</td><td class="n">۱۰٫۹٪</td></tr>
+<tr><td>هم‌خال در دست و فلاش کامل در فلاپ</td><td class="n">۰٫۸۴٪</td></tr>
+<tr><td>جفت در برابر دو اوورکارت (تقریبی)</td><td class="n">۵۵٪ در برابر ۴۵٪</td></tr>
+<tr><td>AA در برابر KK (تقریبی)</td><td class="n">۸۲٪ در برابر ۱۸٪</td></tr>
+</table>
+</section>
+
+<section class="p" id="p5">
+<h2>SPR و نسبت M</h2>
+<p class="note">SPR برای تصمیم پس‌فلاپ و M برای فشار بلایندها در تورنمنت.</p>
+<div class="row">
+<label>استک مؤثر<input id="sk" type="number" value="1000"></label>
+<label>پات فلاپ<input id="sp" type="number" value="100"></label>
+<label>اسمال‌بلایند<input id="sb2" type="number" value="25"></label>
+<label>بیگ‌بلایند<span class="note">همان اندازه‌ی بیگ‌بلایند بالای صفحه</span></label>
+<label>آنته هر نفر<input id="an" type="number" value="0"></label>
+<label>تعداد بازیکن‌ها<input id="np" type="number" value="9" min="2" max="10"></label>
+</div>
+<div class="res" id="r5"></div>
+</section>
+
+<section class="p" id="p6">
+<h2>جدول اندازه‌ی شرط</h2>
+<p class="note">برای هر سایز شرط، ببین حریف چه ایکویتی‌ای لازم دارد و چقدر باید دفاع کند.</p>
+<div class="row"><label>پات<input id="sz" type="number" value="100"></label></div>
+<div class="res"><table id="tb6"></table><p class="note">ایکویتی لازم حریف با سهم بلوف در رنج شرط متعادل برابر است.</p></div>
+</section>
+
+<section class='p' id='p8'><h2>ریز، کال یا فولد پری‌فلاپ بر اساس جایگاه</h2><p class='note'>میز ۶ نفره با استک حدود ۱۰۰ بیگ‌بلایند. جایگاه خودت را روی میز بزن، دو کارتت را انتخاب کن. اگر قبل از تو کسی ریز کرده، دکمه‌ی «انتخاب ریزکننده» را بزن و جایگاه او را هم بزن.</p>
+<div class='mode'><button type='button' id='pmh' class='on'>انتخاب جایگاه من</button> <button type='button' id='pmv'>انتخاب ریزکننده</button> <button type='button' class='btn s' id='pcl'>پاک کردن</button></div>
+<svg id='tbl' viewBox='0 0 380 240' dir='ltr' style='width:100%;max-width:420px;display:block;margin:8px auto' role='img' aria-label='میز پوکر'></svg>
+<div class='row'><label id='osl' style='display:none'>اندازه‌ی ریز ریزکننده<input id='os' type='number' value='125'></label><label>اندازه‌ی استک من<input id='ms' type='number' value='5000'></label></div>
+<div class='slots'><span class='lb'>دست من</span><span id='ps'></span></div>
+<div class='grid' id='pg'></div>
+<div class='res' id='pr'></div>
+<p class='note'>رنج‌ها ساده‌شده‌ی رنج‌های متداول بازی ۶ نفره‌اند و جای قضاوت بر اساس استک، سبک حریف و حالت بازی را نمی‌گیرند.</p></section>
+
+<section class='p' id='p7'><h2>آموزش اصطلاحات و مفاهیم</h2><p class='note'>هر اصطلاح این ماشین‌حساب همراه با یک مثال عددی.</p><dl class='gd'>
+<dt>چیپ و بیگ‌بلایند (BB)</dt><dd>BB حداقل شرط اجباری میز است و واحد استاندارد سنجش. دکمه‌ی بالای صفحه همه‌ی مبلغ‌ها را به BB تبدیل می‌کند. <i>مثال:</i> اگر BB برابر ۵۰ چیپ باشد، پات ۱۰۰ چیپ یعنی ۲ BB.</dd>
+<dt>فلاپ، ترن، ریور</dt><dd>سه کارت اول برد فلاپ، کارت چهارم ترن و کارت پنجم ریور است. بازیکن‌ها برای ساختن بهترین دست پنج‌کارتی از هفت کارت (دو کارت خودش و پنج کارت برد) استفاده می‌کنند.</dd>
+<dt>ایکویتی</dt><dd>سهم تو از پات اگر همه‌ی کارت‌ها باز شوند. <i>مثال:</i> ایکویتی ۳۰٪ یعنی اگر آن دست را بی‌نهایت بار بازی کنی، به‌طور میانگین ۳۰٪ پات مال توست.</dd>
+<dt>مونت‌کارلو</dt><dd>روشی که هزاران دست تصادفی بازی می‌کند و درصد برد را می‌شمارد. جواب تقریبی است و با ۳۰ هزار دست خطایش حدود نیم درصد است.</dd>
+<dt>مساوی (اسپلیت)</dt><dd>وقتی دو دست دقیقاً برابرند و پات تقسیم می‌شود. <i>مثال:</i> مساوی با یک حریف یعنی ۵۰٪ پات برای تو.</dd>
+<dt>شانس پات و ایکویتی لازم</dt><dd>حداقل ایکویتی که کال را بی‌ضرر می‌کند: کال ÷ (پات + شرط + کال). <i>مثال:</i> پات ۱۰۰ و شرط حریف ۵۰: ۵۰ ÷ ۲۰۰ = ۲۵٪.</dd>
+<dt>ارزش مورد انتظار (EV)</dt><dd>میانگین سود یا ضرر یک تصمیم. <i>مثال:</i> ایکویتی ۳۰٪، پات ۱۰۰ و شرط ۵۰: (۰٫۳ × ۱۵۰) − (۰٫۷ × ۵۰) = ۱۰+ پس کال سودآور است.</dd>
+<dt>ایمپلاید اودز</dt><dd>پولی که انتظار داری در خیابان‌های بعد بگیری اگر دستت بسازد. <i>مثال:</i> ایکویتی ۲۰٪ ولی لازم ۲۵٪ است؛ اگر انتظار ۵۰ چیپ برد اضافه داری، کال درست می‌شود.</dd>
+<dt>اوت</dt><dd>کارت‌های باقی‌مانده‌ای که دستت را بهتر می‌کند. <i>مثال:</i> فلاش‌دراو ۹ اوت دارد، چون ۹ کارت هم‌خال دیگر در دسته مانده.</dd>
+<dt>قانون ۴ و ۲</dt><dd>راه سریع تخمین: روی فلاپ اوت × ۴ و روی ترن اوت × ۲. <i>مثال:</i> ۹ اوت روی فلاپ ≈ ۳۶٪ (مقدار دقیق ≈ ۳۵٪) و روی ترن ≈ ۱۸٪.</dd>
+<dt>دراو (گاتشات، اوپن‌اند، فلاش‌دراو)</dt><dd>دستی که هنوز کامل نشده. گاتشات: یک رتبه‌ی وسط استریت کم است (۴ اوت). اوپن‌اند: استریت از دو طرف کامل می‌شود (۸ اوت). فلاش‌دراو: چهار کارت هم‌خال داری (۹ اوت).</dd>
+<dt>اوورکارت</dt><dd>کارتی بالاتر از همه‌ی کارت‌های برد. <i>مثال:</i> با A K روی برد ۹ ۵ ۲، شش کارت (سه A و سه K) اوورکارت‌اند.</dd>
+<dt>بلوف و ولیو</dt><dd>ولیو یعنی شرط با دست قوی برای گرفتن کال از دست ضعیف‌تر. بلوف یعنی شرط با دست ضعیف تا حریف فولد کند.</dd>
+<dt>فولد لازم برای بلوف</dt><dd>B ÷ (P + B) درصد فولدی که بلوف را بدون ایکویتی سودآور می‌کند. <i>مثال:</i> شرط ۱۰۰ در پات ۱۰۰ یعنی حریف باید حداقل ۵۰٪ دفعات فولد کند.</dd>
+<dt>MDF (حداقل دفاع)</dt><dd>درصدی از رنج که حریف باید دفاع کند تا بلوف‌هایت خودبه‌خود سود نکنند: P ÷ (P + B). برای شرط هم‌اندازه‌ی پات برابر ۵۰٪ است.</dd>
+<dt>سهم بلوف و نسبت ولیو به بلوف</dt><dd>ترکیب متعادل شرط‌هایت. <i>مثال:</i> شرط هم‌اندازه‌ی پات: ۱ بلوف به ازای هر ۲ ولیو، یعنی ۳۳٪ بلوف.</dd>
+<dt>کمبو و بلاکر</dt><dd>کمبو تعداد ترکیب‌های ممکن یک دست است: AA شش کمبو، AKs چهار و AKo دوازده. بلاکر کارتی در دست توست که کمبوهای حریف را کم می‌کند. <i>مثال:</i> وقتی یک A داری، حریف به‌جای ۱۶ کمبو AK فقط ۱۲ تا دارد.</dd>
+<dt>هم‌خال و غیرهم‌خال (s و o)</dt><dd>AKs دو کارت هم‌خال و AKo دو کارت از خال‌های متفاوت است.</dd>
+<dt>SPR</dt><dd>نسبت استک مؤثر به پات فلاپ. <i>مثال:</i> استک ۶۰۰ و پات ۲۰۰ یعنی SPR برابر ۳؛ با تاپ‌جفت راحت می‌توانی تعهد کنی.</dd>
+<dt>M و آنته</dt><dd>آنته مبلغ اجباری هر بازیکن در هر دست است. M می‌گوید استکت چند دور بلایند را می‌پوشاند. <i>مثال:</i> استک ۲۰۰۰ و بلایندهای ۵۰ و ۱۰۰ در ۹ نفره بدون آنته: ۲۰۰۰ ÷ ۱۵۰ ≈ ۱۳٫۳. با آنته ۱۰: هزینه‌ی هر دور ۲۴۰ و M ≈ ۸٫۳.</dd>
+<dt>جایگاه‌ها (UTG، HJ، CO، BTN، SB، BB)</dt><dd>ترتیب نوبت پری‌فلاپ در میز ۶ نفره: UTG اولین نفر بعد از بلایندها و بدترین جایگاه است، HJ و CO وسط‌اند، BTN (دیلر) بهترین جایگاه است چون آخر از همه حرف می‌زند، SB و BB بلایندها هستند. <i>مثال:</i> K9s را از BTN می‌شود ریز کرد ولی از UTG فولد می‌شود.</dd>
+<dt>اوپن ریز و ۳‌بت</dt><dd>اوپن ریز اولین ریز پری‌فلاپ است (معمولاً ۲٫۵ BB). ۳‌بت ریز دوم روی ریز قبلی است. <i>مثال:</i> حریف به ۲٫۵ BB ریز کرده و تو از BTN تا ۷٫۵ BB (سه برابر) ۳‌بت می‌کنی؛ از بلایندها حدود چهار برابر.</dd>
+<dt>اوپن ریز و ریریز</dt><dd>اوپن ریز اولین ریز پری‌فلاپ است (معمولاً ۲٫۵ BB و از SB حدود ۳ BB). ریریز یعنی بالا بردن روی ریز قبلی؛ در اصطلاح رایج به آن ۳‌بت می‌گویند. <i>مثال:</i> حریف به ۲٫۵ BB ریز کرده و تو از BTN با AA ریریز می‌کنی: ۳ برابر یعنی ۷٫۵ BB. از SB یا BB ضریب ۴ است: ۱۰ BB.</dd>
+<dt>اندازه‌ی ریز حریف و مبلغ ریریز</dt><dd>در تب جایگاه بعد از انتخاب ریزکننده، اندازه‌ی ریز او را با اسلایدر تنظیم می‌کنی. مبلغ ریریز در جایگاه بعد از او ۳ برابر و از بلایندها ۴ برابر این اندازه است. <i>مثال:</i> حریف از UTG به ۳ BB ریز کرده و تو از CO ریریز می‌کنی: ۳ × ۳ = ۹ BB.</dd>
+<dt>استک من</dt><dd>رنج‌ها همیشه بر پایه‌ی ۱۰۰ BB هستند و استک تو فقط روی اندازه‌ی حرکت اثر می‌گذارد. <i>مثال:</i> با استک ۲۵ BB و ریریز ۷٫۵ BB (۳۰٪ استک) ریریز عادی است. اگر ریریز به ۴۰٪ استک یا بیشتر برسد (مثلاً ۱۰ BB از ۲۵ BB) پیشنهاد آل‌این می‌شود.</dd>
+<dt>آل‌این (پوش)</dt><dd>گذاشتن کل استک وسط. <i>مثال:</i> استک ۱۸ BB و ریریز ۱۰ BB بیش از ۴۰٪ استک است؛ پوش ۱۸ BB بهتر از ریریز کوچک و مجبور شدن به تصمیم بعدی است.</dd>
+<dt>هزینه‌ی کال نسبت به استک</dt><dd>درصدی از استک که برای کال می‌دهی. <i>مثال:</i> کال ۲٫۵ BB از استک ۱۰۰ BB برابر ۲٫۵٪ است، ولی از استک ۲۰ BB برابر ۱۲٫۵٪ و کال سنگین‌تری است.</dd>
+<dt>رنج</dt><dd>مجموعه‌ی همه‌ی دست‌هایی که یک بازیکن در یک موقعیت می‌تواند داشته باشد. در این ماشین‌حساب حریف‌ها دست تصادفی دارند.</dd>
+</dl></section>
+
+<footer class="ft"><div>کانال تلگرام ما👇🏻</div><a href="https://t.me/SolidSmokeClub" target="_blank" rel="noopener">SolidSmokeClub</a></footer>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const fa=(n,d=1)=>isFinite(n)?(+n).toLocaleString('fa-IR',{maximumFractionDigits:d}):'—';
+const pc=(x,d=1)=>fa(x*100,d)+'٪';
+const num=id=>parseFloat($(id).value)||0;
+const kv=(k,v,c='')=>`<div class="kv"><span>${k}</span><b class="${c}">${v}</b></div>`;
+const names=['شانس پات','اوت','بلوف و MDF','کمبو','SPR و M'];
+const tabs=['جایگاه (پری‌فلاپ)','ایکویتی','شانس پات','اوت','بلوف و MDF','کمبو و جداول','SPR و M','اندازه‌ی شرط','آموزش و اصطلاحات'];
+const T=$('#tabs');
+tabs.forEach((t,i)=>{const b=document.createElement('button');b.textContent=t;b.setAttribute('role','tab');b.onclick=()=>show(i);T.appendChild(b)});
+function show(i){[...T.children].forEach((b,j)=>b.setAttribute('aria-selected',i===j));document.querySelectorAll('.p').forEach((p,j)=>p.classList.toggle('on',i===j))}
+const p0=$('#p0');p0.parentNode.insertBefore($('#p8'),p0);show(0);
+
+/* ---------- ارزیابی دست ---------- */
+function top(mask,n,ex){const o=[];for(let r=12;r>=0&&o.length<n;r--)if((mask>>r&1)&&!(ex&&ex.includes(r)))o.push(r);return o}
+const pack=a=>a.reduce((x,y)=>x*13+y,0);
+function stH(m){for(let h=12;h>=4;h--)if(((m>>(h-4))&31)===31)return h;return (m&0x100F)===0x100F?3:-1}
+function ev(cs){
+ const rc=new Array(13).fill(0),sc=[0,0,0,0],sm=[0,0,0,0];
+ for(const c of cs){const r=c>>2,s=c&3;rc[r]++;sc[s]++;sm[s]|=1<<r}
+ let mask=0;for(let r=0;r<13;r++)if(rc[r])mask|=1<<r;
+ let fs=-1;for(let s=0;s<4;s++)if(sc[s]>=5)fs=s;
+ if(fs>=0){const h=stH(sm[fs]);if(h>=0)return 8e6+h}
+ let q=-1;const tr=[],pr=[];
+ for(let r=12;r>=0;r--){if(rc[r]===4)q=r;else if(rc[r]===3)tr.push(r);else if(rc[r]===2)pr.push(r)}
+ if(q>=0)return 7e6+q*13+top(mask,1,[q])[0];
+ if(tr.length&&(tr.length>1||pr.length)){const p=tr.length>1?Math.max(tr[1],pr[0]??-1):pr[0];return 6e6+tr[0]*13+p}
+ if(fs>=0)return 5e6+pack(top(sm[fs],5));
+ const s=stH(mask);if(s>=0)return 4e6+s;
+ if(tr.length)return 3e6+pack([tr[0],...top(mask,2,[tr[0]])]);
+ if(pr.length>1)return 2e6+pack([pr[0],pr[1],...top(mask,1,[pr[0],pr[1]])]);
+ if(pr.length)return 1e6+pack([pr[0],...top(mask,3,[pr[0]])]);
+ return pack(top(mask,5));
+}
+
+/* ---------- انتخاب کارت ---------- */
+const RK='23456789TJQKA',SU=['♠','♥','♦','♣'];
+let hero=[],board=[],target='h';
+const cardHTML=(c,cls='')=>`<span class="cc ${(c&3)==1||(c&3)==2?'r':''} ${cls}">${RK[c>>2]==='T'?'10':RK[c>>2]}${SU[c&3]}</span>`;
+function draw(){
+ $('#sh').innerHTML=[0,1].map(i=>hero[i]!=null?cardHTML(hero[i]):'<span class="cc e">؟</span>').join(' ');
+ $('#sb').innerHTML=[0,1,2,3,4].map(i=>board[i]!=null?cardHTML(board[i]):'<span class="cc e">؟</span>').join(' ');
+ document.querySelectorAll('#grid button').forEach(b=>{const c=+b.dataset.c;b.classList.toggle('u',hero.includes(c)||board.includes(c))});
+ $('#mh').classList.toggle('on',target==='h');$('#mb').classList.toggle('on',target==='b');
+}
+const G=$('#grid');
+for(let s=0;s<4;s++)for(let r=12;r>=0;r--){const c=r*4+s,b=document.createElement('button');b.dataset.c=c;b.textContent=(RK[r]==='T'?'10':RK[r])+SU[s];if(s==1||s==2)b.className='r';
+ b.onclick=()=>{
+  if(hero.includes(c)){hero=hero.filter(x=>x!==c);target='h'}
+  else if(board.includes(c)){board=board.filter(x=>x!==c);target='b'}
+  else if(target==='h'&&hero.length<2){hero.push(c);if(hero.length===2)target='b'}
+  else if(board.length<5){board.push(c);target='b'}
+  draw()};G.appendChild(b)}
+$('#mh').onclick=()=>{target='h';draw()};$('#mb').onclick=()=>{target='b';draw()};
+$('#clr').onclick=()=>{hero=[];board=[];target='h';$('#r0').innerHTML='';draw()};
+for(let i=1;i<=9;i++)$('#opp').add(new Option(fa(i,0),i));
+draw();
+
+$('#go').onclick=()=>{
+ const R=$('#r0');
+ if(hero.length<2){R.innerHTML='<span class="bad">اول دو کارت دست خودت را انتخاب کن.</span>';return}
+ if(board.length===1||board.length===2){R.innerHTML='<span class="bad">برد باید ۰، ۳، ۴ یا ۵ کارت باشد.</span>';return}
+ const used=new Set([...hero,...board]),deck=[];for(let i=0;i<52;i++)if(!used.has(i))deck.push(i);
+ const op=+$('#opp').value,nb=5-board.length,need=op*2+nb,N=30000;let win=0,tie=0,eqs=0;
+ for(let it=0;it<N;it++){
+  for(let j=0;j<need;j++){const k=j+(Math.random()*(deck.length-j)|0);const t=deck[j];deck[j]=deck[k];deck[k]=t}
+  const full=board.concat(deck.slice(0,nb));
+  const hs=ev(hero.concat(full));let lose=false,cnt=0;
+  for(let o=0;o<op;o++){const s=ev([deck[nb+2*o],deck[nb+2*o+1]].concat(full));if(s>hs){lose=true;break}if(s===hs)cnt++}
+  if(!lose){if(cnt===0){win++;eqs+=1}else{tie++;eqs+=1/(cnt+1)}}
+ }
+ const w=win/N,t=tie/N,e=eqs/N;
+ R.innerHTML=`<div class="big">${pc(e)}</div><div>ایکویتی کل در برابر ${fa(op,0)} حریف</div>
+ <div class="bar"><i style="width:${w*100}%;background:var(--ok)"></i><i style="width:${t*100}%;background:var(--br)"></i></div>
+ ${kv('برد قطعی',pc(w),'good')}${kv('مساوی (با سهم)',pc(t))}${kv('باخت',pc(1-w-t),'bad')}
+ ${kv('ایکویتی لازم برای کال هم‌پات (۱ حریف)','۳۳٫۳٪')}
+ <p class="note">${fa(N,0)} دست شبیه‌سازی شد؛ خطای تقریبی حدود ±۰٫۵٪.</p>`;
+};
+
+/* ---------- شانس پات ---------- */
+function c1(){
+ const P=num('#pt'),B=num('#bt'),e=num('#eq')/100,I=num('#im');
+ const tot=P+B,req=B/(tot+B);
+ let h=kv('ایکویتی لازم',pc(req,1))+kv('نسبت شانس پات',`${fa(tot/B,2)} به ۱`)+kv('پات بعد از کال',mf(tot+B));
+ if($('#eq').value!==''){
+  const evc=e*tot-(1-e)*B,evi=evc+e*I;
+  h+=kv('ارزش کال (بدون ایمپلاید)',mf(evc),evc>=0?'good':'bad');
+  if(I>0)h+=kv('ارزش کال با ایمپلاید',mf(evi),evi>=0?'good':'bad');
+  h+=`<p>${e>=req?'<span class="good">ایکویتی از حد لازم بیشتر است؛ کال سودآور است.</span>':'<span class="bad">ایکویتی کمتر از حد لازم است.</span>'}</p>`;
+  if(e<req&&e>0){const need=((1-e)*B)/e-tot;if(need>0)h+=kv('ایمپلاید لازم برای صفر شدن ارزش',mf(need))}
+ }
+ $('#r1').innerHTML=h;
+}
+/* ---------- اوت ---------- */
+const next=(o,n)=>o/n,two=o=>1-((47-o)*(46-o))/(47*46);
+function c2(){
+ const o=num('#ou'),f=$('#st').value==='f';
+ const ex=f?two(o):next(o,46),ap=f?4*o/100:2*o/100;
+ $('#r2').innerHTML=(f?kv('شانس رسیدن تا ریور',pc(ex),'good')+kv('شانس رسیدن در ترن',pc(o/47))+kv('تقریب قانون ۴',pc(ap,0)):kv('شانس رسیدن در ریور',pc(ex),'good')+kv('تقریب قانون ۲',pc(ap,0)))+kv('ایکویتی لازم برای این شانس',pc(ex,1))+`<p class="note">قانون ۴ و ۲: تعداد اوت را روی فلاپ در ۴ و روی ترن در ۲ ضرب کن. برای بیش از ۸ اوت کمی بیشتر برآورد می‌کند.</p>`;
+}
+const draws=[['گاتشات',4],['دو اوورکارت',6],['اوپن‌اند استریت‌دراو',8],['فلاش‌دراو',9],['فلاش‌دراو + گاتشات',12],['فلاش‌دراو + اوپن‌اند',15],['جفت به ست یا بهتر (جیب‌جفت)',2],['دو جفت به فول‌هاوس',4]];
+$('#tb2').innerHTML='<tr><th>دراو</th><th>اوت</th><th>فلاپ تا ریور</th><th>ترن تا ریور</th></tr>'+draws.map(d=>`<tr><td>${d[0]}</td><td class="n">${fa(d[1],0)}</td><td class="n">${pc(two(d[1]))}</td><td class="n">${pc(d[1]/46)}</td></tr>`).join('');
+/* ---------- بلوف ---------- */
+function c3(){
+ const P=num('#bp'),B=num('#bb'),f=num('#bf')/100,e=num('#be')/100;
+ const fo=B/(P+B),mdf=P/(P+B),bs=B/(P+2*B);
+ const evb=f*P+(1-f)*(e*(P+B)-(1-e)*B);
+ $('#r3').innerHTML=kv('حداقل فولد لازم برای سود بلوف خالص',pc(fo))+kv('MDF (حداقل دفاع حریف)',pc(mdf))+kv('سهم بلوف در رنج شرط (حالت بی‌تفاوتی)',pc(bs))+kv('نسبت ولیو به بلوف',`${fa((P+B)/B,2)} به ۱`)+kv('ارزش مورد انتظار این بلوف',mf(evb),evb>=0?'good':'bad')+`<p class="note">اگر حریف بیشتر از «فولد لازم» فولد کند، بلوف خالص سودآور است.</p>`;
+}
+/* ---------- کمبو ---------- */
+const TOT=1326;
+[['c1',6],['c2',78],['c3',4],['c4',12],['c5',16],['c6',160],['c7',312]].forEach(a=>$('#'+a[0]).textContent=pc(a[1]/TOT,2));
+function c4(){
+ const x=Math.min(4,Math.max(0,num('#cx'))),y=Math.min(4,Math.max(0,num('#cy')));
+ $('#r4').innerHTML=kv('کمبو دو رتبه‌ی متفاوت (X و Y)',fa(x*y,0))+kv('کمبو جفت از رتبه‌ی اول',fa(x*(x-1)/2,0))+kv('کمبو جفت از رتبه‌ی دوم',fa(y*(y-1)/2,0))+`<p class="note">هر کارت دیده‌شده (در دست تو یا روی برد) کمبوهای حریف را کم می‌کند؛ مثلاً وقتی A در دست توست، حریف به‌جای ۱۶ کمبو AK فقط ۱۲ کمبو دارد.</p>`;
+}
+/* ---------- SPR و M ---------- */
+function c5(){
+ const S=num('#sk'),P=num('#sp'),sb=num('#sb2'),bb=BBV,an=num('#an'),n=num('#np');
+ const spr=S/P,cost=sb+bb+an*n,M=S/cost;
+ const sg=spr<=3?'خیلی کم: با تاپ‌جفت یا بهتر معمولاً تعهد می‌کنی':spr<=7?'متوسط: به دست‌های قوی‌تر از تاپ‌جفت نیاز داری':spr<=13?'عمیق: ارزش دست‌های بسیار قوی و دراو بیشتر می‌شود':'خیلی عمیق: ایمپلاید و دست‌های نات مهم‌اند';
+ const zn=M>20?'منطقه‌ی سبز: بازی عادی':M>10?'منطقه‌ی زرد: رنج باز کردن کوچک‌تر':M>6?'منطقه‌ی نارنجی: فقط ری‌استیل یا شروع‌کردن با پوش':M>1?'منطقه‌ی قرمز: پوش یا فولد':'منطقه‌ی مرگ: تقریباً هر دستی پوش';
+ $('#r5').innerHTML=kv('SPR',fa(spr,2),'')+`<p class="note">${sg}</p>`+kv('هزینه‌ی هر دور',mf(cost))+kv('M',fa(M,1))+`<p class="note">${zn}</p>`+kv('استک به بیگ‌بلایند',fa(S/bb,1)+' BB');
+}
+function c6(){const P=num('#sz');$('#tb6').innerHTML='<tr><th>سایز</th><th>مبلغ</th><th>ایکویتی لازم حریف</th><th>MDF</th><th>فولد لازم بلوف</th></tr>'+[.25,.33,.5,.66,.75,1,1.5,2].map(f=>`<tr><td>${pc(f,0)} پات</td><td class="n">${mf(f*P)}</td><td class="n">${pc(f/(1+2*f))}</td><td class="n">${pc(1/(1+f))}</td><td class="n">${pc(f/(1+f))}</td></tr>`).join('')}
+const CFG={pt:[0,2000,10],bt:[0,2000,5],eq:[0,100,1],im:[0,1000,10],ou:[0,25,1],bp:[0,2000,10],bb:[0,3000,5],bf:[0,100,1],be:[0,100,1],cx:[0,4,1],cy:[0,4,1],sk:[0,20000,50],sp:[0,2000,10],sb2:[0,500,5],bb2:[0,1000,10],an:[0,200,1],np:[2,10,1],sz:[10,2000,10]};
+let BBV=50,BBM=false;
+const mf=x=>BBM?fa(x/BBV,2)+' BB':fa(x,1);
+const MON={pt:[2,2000,1,2,200,.5],bt:[2,2000,1,1,200,.5],im:[0,1000,1,0,200,.5],bp:[2,2000,1,2,200,.5],bb:[2,3000,1,1,300,.5],sk:[2,20000,5,5,300,1],sp:[2,2000,1,2,200,.5],sb2:[1,500,1,.5,10,.5],an:[0,200,1,0,5,.1],sz:[2,2000,1,2,200,.5],os:[2,1000,1,2,30,.5],ms:[2,20000,10,5,300,1]};
+const CFX={eq:[0,100,1],ou:[0,25,1],bf:[0,100,1],be:[0,100,1],cx:[0,4,1],cy:[0,4,1],np:[2,10,1],gbb:[2,1000,1]};
+const W=[];
+const all=()=>{const nb=num('#gbb')||50;if(nb!==BBV){BBV=nb;if(BBM)W.forEach(o=>o.mon&&o.set(+o.r.value))}c1();c2();c3();c4();c5();c6();c7()};
+const mk=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h)e.textContent=h;return e};
+document.querySelectorAll('input[type=number]').forEach(i=>{
+ const mon=MON[i.id],c=mon||CFX[i.id]||[0,1000,1];
+ const w=mk('div','sl'),m=mk('button','pm','−'),r=mk('input'),p=mk('button','pm','+'),v=mk('b'),x=mon&&i.id!=='an'?mk('button','pm x2','2x'):null;
+ r.type='range';m.type=p.type='button';
+ w.append(m,r,p);if(x)w.append(x);w.append(v);
+ const o={i,r,mon};W.push(o);
+ const cf=()=>mon?(BBM?mon.slice(3):mon.slice(0,3)):c;
+ o.disp=()=>mon&&BBM?+i.value/BBV:+i.value;
+ o.set=d=>{const [mn,mx]=cf();d=Math.round(Math.min(mx,Math.max(mn,d))*100)/100;r.value=d;i.value=mon&&BBM?d*BBV:d;v.textContent=fa(d,mon&&BBM?1:0)+(mon&&BBM?' BB':'')};
+ o.setup=()=>{const [mn,mx,st]=cf();r.min=mn;r.max=mx;r.step=st;o.set(o.disp())};
+ r.addEventListener('input',()=>o.set(+r.value));
+ m.onclick=()=>{o.set(o.disp()-(+r.step));all()};
+ p.onclick=()=>{o.set(o.disp()+(+r.step));all()};
+ if(x)x.onclick=()=>{o.set(o.disp()*2);all()};
+ o.setup();i.style.display='none';i.after(w);
+});
+document.querySelectorAll('.un button').forEach(b=>b.onclick=()=>{BBM=b.dataset.u==='b';document.querySelectorAll('.un button').forEach(y=>y.classList.toggle('on',y===b));W.forEach(o=>o.mon&&o.setup());all()});
+[].forEach(i=>{
+ const [mn,mx,st]=CFG[i.id]||[0,1000,1];
+ const w=document.createElement('div');w.className='sl';
+ w.innerHTML='<button type="button" class="pm" aria-label="کم">−</button><input type="range"><button type="button" class="pm" aria-label="زیاد">+</button><b></b>';
+ const [m,r,p,v]=[w.children[0],w.children[1],w.children[2],w.children[3]];
+ r.min=mn;r.max=mx;r.step=st;r.value=i.value;v.textContent=fa(i.value,0);
+ const set=x=>{x=Math.min(mx,Math.max(mn,x));r.value=x;i.value=x;v.textContent=fa(x,0)};
+ r.addEventListener('input',()=>{i.value=r.value;v.textContent=fa(r.value,0)});
+ m.onclick=()=>{set(+i.value-st);all()};p.onclick=()=>{set(+i.value+st);all()};
+ i.style.display='none';i.after(w);
+});
+const PN=['UTG','HJ','CO','BTN','SB','BB'],SEAT=[[110,38],[270,38],[345,120],[270,205],[110,205],[35,120]];
+const ex=s=>{const o=new Set();s.split(',').forEach(t=>{const a=RK.indexOf(t[0]),b=RK.indexOf(t[1]),sf=(t[2]==='s'||t[2]==='o')?t[2]:'',pl=t.endsWith('+');
+ if(a===b){for(let r=a;r<=(pl?12:a);r++)o.add(RK[r]+RK[r])}
+ else{const hi=Math.max(a,b),lo=Math.min(a,b);for(let r=lo;r<=(pl?hi-1:lo);r++)o.add(RK[hi]+RK[r]+sf)}});return o};
+const OP=['22+,A2s+,KTs+,QTs+,JTs,T9s,98s,87s,76s,AJo+,KQo','22+,A2s+,K9s+,Q9s+,J9s+,T9s,98s,87s,76s,65s,ATo+,KJo+,QJo','22+,A2s+,K6s+,Q8s+,J8s+,T8s+,97s+,86s+,76s,65s,54s,A9o+,KTo+,QTo+,JTo','22+,A2s+,K2s+,Q4s+,J6s+,T6s+,96s+,85s+,75s+,64s+,54s,A2o+,K8o+,Q9o+,J9o+,T9o,98o','22+,A2s+,K4s+,Q6s+,J7s+,T7s+,97s+,86s+,76s,65s,54s,A2o+,K9o+,Q9o+,J9o+,T9o'].map(ex);
+const T3V=['QQ+,AKs,AKo','QQ+,AKs,AKo','JJ+,AQs+,AKo','TT+,AJs+,KQs,AQo+','TT+,AJs+,KQs,AQo+'].map(ex);
+const T3B=['A5s,A4s','A5s,A4s','A5s,A4s,A3s,76s','A5s,A4s,A3s,A2s,76s,65s,54s','A5s,A4s,A3s,A2s,76s,65s,54s'].map(ex);
+const CIT=ex('55+,AJs,ATs,KQs,KJs,QJs,JTs,T9s,98s,AQo'),CIW=ex('22+,A9s+,KTs+,QTs+,J9s+,T9s,98s,87s,76s,65s,AJo,ATo,KQo,KJo,QJo'),SBC=ex('66+,AJs,ATs,KQs,QJs,JTs');
+const BB1=ex('22+,A2s+,K9s+,Q9s+,J9s+,T8s+,97s+,86s+,75s+,65s,54s,ATo+,KJo+,QJo'),BB2=ex('22+,A2s+,K5s+,Q7s+,J7s+,T7s+,96s+,85s+,75s+,64s+,53s+,A2o+,K9o+,Q9o+,J9o+,T9o,98o');
+const dec=(h,hp,vp)=>{
+ if(vp<0)return hp===5?'K':OP[hp].has(h)?'R':'F';
+ if(T3V[vp].has(h))return 'R';if(T3B[vp].has(h))return 'B';
+ const c=hp===5?(vp<2?BB1:BB2):hp===4?SBC:(vp<2?CIT:CIW);
+ return c.has(h)?'C':'F'};
+const pp={h:null,v:-1,mode:'h',cards:[]};
+const amt=x=>BBM?fa(x,1)+' BB':fa(x*BBV,0)+' چیپ';
+function drawPos(){
+ const s=SEAT.map((p,i)=>{const on=pp.h===i||pp.v===i,c=pp.h===i?'var(--ac)':pp.v===i?'var(--red)':'var(--card)';
+ return `<g data-i='${i}' style='cursor:pointer'><circle cx='${p[0]}' cy='${p[1]}' r='25' fill='${c}' stroke='var(--bd)' stroke-width='2'/><text x='${p[0]}' y='${p[1]+5}' text-anchor='middle' font-size='14' font-weight='800' fill='${on?'#fff':'var(--fg)'}'>${PN[i]}</text></g>`}).join('');
+ $('#tbl').innerHTML=`<ellipse cx='190' cy='120' rx='140' ry='68' fill='#1f5a43' stroke='#a9801f' stroke-width='5'/><text x='190' y='125' text-anchor='middle' fill='#cfe5da' font-size='13'>میز ۶ نفره</text>`+s+`<circle cx='236' cy='182' r='9' fill='#fff' stroke='#999'/><text x='236' y='186' text-anchor='middle' font-size='10' font-weight='800' fill='#222'>D</text>`}
+function c7old(){
+ drawPos();
+ $('#pmh').classList.toggle('on',pp.mode==='h');$('#pmv').classList.toggle('on',pp.mode==='v');
+ document.querySelectorAll('#pg button').forEach(b=>b.classList.toggle('u',pp.cards.includes(+b.dataset.c)));
+ $('#ps').innerHTML=[0,1].map(i=>pp.cards[i]!=null?cardHTML(pp.cards[i]):'<span class="cc e">؟</span>').join(' ');
+ const R=$('#pr');
+ if(pp.h==null){R.innerHTML='<p class="note">اول جایگاه خودت را روی میز بزن.</p>';return}
+ if(pp.v>=0&&pp.v>=pp.h){R.innerHTML='<p class="bad">ریزکننده باید قبل از تو سر نوبت باشد. جایگاه او را دوباره انتخاب کن.</p>';return}
+ const open=pp.v<0,cnt={R:0,B:0,C:0,F:0,K:0};let hh=null;
+ if(pp.cards.length===2){const [a,b]=pp.cards.map(c=>c>>2),sv=(pp.cards[0]&3)===(pp.cards[1]&3);hh=a===b?RK[a]+RK[a]:RK[Math.max(a,b)]+RK[Math.min(a,b)]+(sv?'s':'o')}
+ let g='<div class="mx">';
+ for(let i=12;i>=0;i--)for(let j=12;j>=0;j--){const n=i===j?RK[i]+RK[i]:i>j?RK[i]+RK[j]+'s':RK[j]+RK[i]+'o',a=dec(n,pp.h,pp.v);cnt[a]+=i===j?6:i>j?4:12;g+=`<i class='m${a}${n===hh?' me':''}'>${n}</i>`}
+ g+='</div>';
+ let h='';
+ if(hh){const a=dec(hh,pp.h,pp.v),rb=pp.v===4?3:2.5,tb=(pp.h>=4?4:3)*rb;
+  const T={R:open?'ریز (اوپن) به اندازه‌ی '+amt(pp.h===4?3:2.5):'۳‌بت (ولیو) تا '+amt(tb),B:'۳‌بت بلوف تا '+amt(tb),C:'کال ('+amt(rb)+')',F:'فولد',K:'چک (اگر کسی ریز نکرده)'}[a];
+  h+=`<div class='big'>${T}</div><div>دست ${hh} در جایگاه ${PN[pp.h]}${open?'':' در برابر ریز '+PN[pp.v]}</div>`}
+ else h+='<p class="note">دو کارت خودت را هم انتخاب کن تا پیشنهاد دقیق را ببینی. جدول زیر کل رنج را نشان می‌دهد.</p>';
+ const pct=k=>pc(cnt[k]/1326);
+ h+=pp.h===5&&open?'<p class="note">بیگ‌بلایند وقتی کسی ریز نکرده فقط چک می‌کند. برای دفاع، ریزکننده را انتخاب کن.</p>':open?kv('درصد دست‌های اوپن',pct('R')):kv('۳‌بت ولیو',pct('R'))+kv('۳‌بت بلوف',pct('B'))+kv('کال',pct('C'));
+ R.innerHTML=h+g+'<p class="note">سبز: ریز یا ۳‌بت ولیو، طلایی: ۳‌بت بلوف، آبی: کال، خاکستری: فولد. بالای قطر هم‌خال و پایین قطر غیرهم‌خال است.</p>'}
+const pg=$('#pg');
+for(let s=0;s<4;s++)for(let r=12;r>=0;r--){const c=r*4+s,b=document.createElement('button');b.dataset.c=c;b.textContent=(RK[r]==='T'?'10':RK[r])+SU[s];if(s==1||s==2)b.className='r';b.onclick=()=>{const k=pp.cards.indexOf(c);if(k>=0)pp.cards.splice(k,1);else if(pp.cards.length<2)pp.cards.push(c);c7()};pg.appendChild(b)}
+$('#tbl').onclick=e=>{const g=e.target.closest('g[data-i]');if(!g)return;const i=+g.dataset.i;if(pp.mode==='h'){pp.h=i;if(pp.v>=i)pp.v=-1}else if(i<5)pp.v=pp.v===i?-1:i;c7()};
+$('#pmh').onclick=()=>{pp.mode='h';c7()};$('#pmv').onclick=()=>{pp.mode='v';c7()};
+$('#pcl').onclick=()=>{pp.h=null;pp.v=-1;pp.cards=[];pp.mode='h';c7()};
+document.querySelectorAll('dl.gd dt').forEach(t=>{if(t.textContent.includes('۳‌بت')){t.nextElementSibling.remove();t.remove()}});
+function c7(){
+ c7old();
+ const R=$('#pr'),osl=$('#osl');
+ if(osl)osl.style.display=pp.v>=0?'':'none';
+ R.innerHTML=R.innerHTML.split('۳‌بت').join('ریریز');
+ if(pp.h==null||(pp.v>=0&&pp.v>=pp.h)||pp.cards.length<2)return;
+ const [a,b]=pp.cards.map(c=>c>>2),sv=(pp.cards[0]&3)===(pp.cards[1]&3),hh=a===b?RK[a]+RK[a]:RK[Math.max(a,b)]+RK[Math.min(a,b)]+(sv?'s':'o');
+ const d=dec(hh,pp.h,pp.v),open=pp.v<0,S=Math.max(num('#ms'),1),B=BBV,O=open?(pp.h===4?3:2.5)*B:num('#os'),am=c=>amt(c/B),rr=(pp.h>=4?4:3)*O,sh=rr>=0.4*S;
+ let T='فولد',x=kv('استک من',fa(S/B,0)+' BB');
+ if(d==='K')T='چک (اگر کسی ریز نکرده)';
+ else if(open&&d==='R')T=O>=S?'پوش (آل‌این) '+am(S):'ریز (اوپن) به اندازه‌ی '+am(O);
+ else if(d==='R'||d==='B'){T=sh?'ریریز: آل‌این '+am(S):'ریریز ('+(d==='R'?'ولیو':'بلوف')+') تا '+am(rr);x+=kv('ریریز نسبت به استک',pc(Math.min(rr,S)/S,0))}
+ else if(d==='C'){T=O>=S?'کال آل‌این '+am(S):'کال ('+am(O)+')';x+=kv('هزینه‌ی کال از استک',pc(Math.min(O,S)/S,1))}
+ if(S<20*B)x+=`<p class='bad'>استک کمتر از ۲۰ BB است؛ رنج‌ها بر پایه‌ی ۱۰۰ BB هستند و در این عمق معمولاً پوش یا فولد بهتر است.</p>`;
+ const big=R.querySelector('.big');
+ if(big){big.textContent=T;const n=big.nextElementSibling;if(n)n.insertAdjacentHTML('afterend',x)}
+}
+document.addEventListener('input',all);all();
+})();
+</script>
+</body>
+</html>
